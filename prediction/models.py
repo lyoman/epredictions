@@ -44,7 +44,7 @@ class Prediction(models.Model):
 
 
 class PredictionParameter(models.Model):
-    user = models.ForeignKey(_("Name of the logged in user"), settings.AUTH_USER_MODEL, default=1,
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, default=1,
                              on_delete=models.CASCADE, blank=True, null=True)
     disease = models.CharField(
         _("Name of the disease"), max_length=250, null=True, blank=True)
@@ -54,6 +54,10 @@ class PredictionParameter(models.Model):
         _("Average number of cases per week"), max_length=250, null=True, blank=True)
     avg_month = models.CharField(
         _("Average number of cases per month"), max_length=250, null=True, blank=True)
+    age = models.CharField(
+        _("The age that is most likely to be affected"), max_length=250, null=True, blank=True)
+    gender = models.CharField(
+        _("The gender that is most likely to be affected"), max_length=250, null=True, blank=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
 

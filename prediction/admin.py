@@ -27,6 +27,8 @@ class PredictionParameterModelAdmin(admin.ModelAdmin):
     list_display        = [
                            "user", 
                            "disease",
+                           "age",
+                           "gender",
                            "avg_day", 
                            "avg_week", 
                            "avg_month",
@@ -35,7 +37,7 @@ class PredictionParameterModelAdmin(admin.ModelAdmin):
                            ]
     list_display_links  = ["updated", "timestamp", "user", "disease"]
     list_editable       = ["avg_day", "avg_week", "avg_month"]
-    list_filter         = ["updated", "timestamp", "disease"]
+    list_filter         = ["updated", "timestamp", "disease", "gender", "age"]
     search_fields       = ["disease"]
     class Meta:
         model = PredictionParameter

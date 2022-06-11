@@ -6,7 +6,7 @@ from rest_framework.serializers import (
 
 from accounts.api.serializers import UserDetailSerializer
 # from medicine.api.serializers import ProductSerializer
-from prediction.models import Prediction
+from prediction.models import Prediction, PredictionParameter
 # from .serializers import PostSerializer
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
@@ -31,6 +31,7 @@ class PredictionCreateUpdateSerializer(ModelSerializer):
         "symptom_4",
         "symptom_4",
         "symptom_5",
+        "symptoms"
         ]
 
 
@@ -57,6 +58,7 @@ class PredictionDetailSerializer(ModelSerializer):
             "symptom_4",
             "symptom_4",
             "symptom_5",
+            "symptoms",
             'updated',
             'timestamp'
         ]
@@ -64,7 +66,7 @@ class PredictionDetailSerializer(ModelSerializer):
 class PredictionListSerializer(ModelSerializer):
     url = prediction_detail_url
     delete_url = HyperlinkedIdentityField(
-        view_name='prediction-api:delete',
+        view_name='prediction-api:delete_parameter',
         lookup_field='id'#or primary key <pk>
     )
     class Meta:
@@ -84,6 +86,71 @@ class PredictionListSerializer(ModelSerializer):
             "symptom_4",
             "symptom_4",
             "symptom_5",
+            "symptoms",
+            'updated',
+            'timestamp'
+        ]
+        
+        
+
+########################################
+class PredictionParameterCreateUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = PredictionParameter
+        fields = [
+        'id',
+        "user", 
+        "disease",
+        "age",
+        "gender",
+        "avg_day", 
+        "avg_week", 
+        "avg_month",
+        ]
+
+
+prediction_parameter_detail_url = HyperlinkedIdentityField(
+        view_name='prediction-api:detail_parameter',
+        lookup_field='id'#or primary key <pk>
+    )
+
+class PredictionParameterDetailSerializer(ModelSerializer):
+    url = prediction_parameter_detail_url
+    class Meta:
+        model = PredictionParameter
+        fields = [
+            'url',
+            'id',
+            "user", 
+            "disease",
+            "age",
+            "gender",
+            "avg_day", 
+            "avg_week", 
+            "avg_month",
+            'updated',
+            'timestamp'
+        ]
+
+class PredictionParameterListSerializer(ModelSerializer):
+    url = prediction_parameter_detail_url
+    delete_url = HyperlinkedIdentityField(
+        view_name='prediction-api:delete_parameter',
+        lookup_field='id'#or primary key <pk>
+    )
+    class Meta:
+        model = PredictionParameter
+        fields = [
+            'url',
+            'id',
+            'delete_url',
+            "user", 
+            "disease",
+            "age",
+            "gender",
+            "avg_day", 
+            "avg_week", 
+            "avg_month",
             'updated',
             'timestamp'
         ]

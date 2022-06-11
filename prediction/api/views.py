@@ -1,6 +1,6 @@
 from rest_framework.generics import ListAPIView
 
-from prediction.models import Prediction
+from prediction.models import Prediction, PredictionParameter
 # from .serializers import PredictionSerializer
 
 from django.db.models import Q
@@ -25,6 +25,10 @@ from .serializers import (
     PredictionListSerializer,
     PredictionDetailSerializer, 
     PredictionCreateUpdateSerializer,
+    
+    PredictionParameterListSerializer,
+    PredictionParameterDetailSerializer, 
+    PredictionParameterCreateUpdateSerializer,
     )
 
 from rest_framework.permissions import (
@@ -74,6 +78,59 @@ class PredictionListAPIView(ListAPIView):
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['disease']
     pagination_class = PredictionPageNumberPagination
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        queryset = Prediction.objects.filter(active=True)
+        id = self.request.query_params.get('disease', None)
+        if id is not None:
+            queryset = queryset.filter(disease=id)
+            print("hey you", queryset)
+        return queryset
+    
+    
+
+##################Prediction Parameters#########################
+
+#Creating a Parameter
+class PredictionParameterCreateAPIView(CreateAPIView):
+    queryset = PredictionParameter.objects.all()
+    serializer_class = PredictionParameterCreateUpdateSerializer 
+    # lookup_field = 'id'
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+    
+    
+class PredictionParameterUpdateAPIView(RetrieveUpdateAPIView):
+    queryset = PredictionParameter.objects.all()
+    serializer_class = PredictionParameterCreateUpdateSerializer
+    lookup_field = 'id'
+    permission_classes = [AllowAny]
+    # permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+
+    # def perform_update(self, serializer):
+    #     serializer.save(user=self.request.user)
+
+class PredictionParameterDeleteAPIView(DestroyAPIView):
+    queryset = PredictionParameter.objects.all()
+    serializer_class = PredictionParameterDetailSerializer
+    lookup_field = 'id'
+    # permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    # permission_classes = [AllowAny]
+    permission_classes = [IsOwnerOrReadOnly]
+
+class PredictionParameterDetailAPIView(RetrieveAPIView):
+    queryset = PredictionParameter.objects.all()
+    serializer_class = PredictionParameterDetailSerializer
+    lookup_field = 'id'
+    permission_classes = [AllowAny]
+
+class PredictionParameterListAPIView(ListAPIView):
+    serializer_class = PredictionParameterListSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['disease']
+    # pagination_class = PredictionPageNumberPagination
     permission_classes = [AllowAny]
 
     def get_queryset(self):
